@@ -5,6 +5,7 @@
 #     strategy_description: a string
 #     move: A function that returns 'c' or 'b'
 #     Changey-Changey Again
+
 ####
 team_name = 'Mr. Lande' # Only 10 chars displayed.
 strategy_name = 'Tit for Tat'
