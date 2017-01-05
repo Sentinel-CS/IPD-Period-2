@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ####
 # Each team's file must define four tokens:
 #     team_name: a string
@@ -6,9 +7,9 @@
 #     move: A function that returns 'c' or 'b'
 ####
 
-team_name = 'The name the team gives to itself' # Only 10 chars displayed.
-strategy_name = 'The name the team gives to this strategy'
-strategy_description = 'How does this strategy decide?'
+team_name = 'Ω' # Only 10 chars displayed.
+strategy_name = 'Pavlov strategy'
+strategy_description = 'Looks at what has worked out in the past'
     
 def move(my_history, their_history, my_score, their_score):
     ''' Arguments accepted: my_history, their_history are strings.
@@ -25,10 +26,33 @@ def move(my_history, their_history, my_score, their_score):
     
     # Analyze my_history and their_history and/or my_score and their_score.
     # Decide whether to return 'c' or 'b'.
-    
-    return 'c'
-
-    
+    if len(my_history)<5:
+        if len(my_history)== 0:
+            return 'c'
+        if len(my_history)>0:
+            return their_history[-1]
+    points = [0,1]
+    index_B = 0
+    index_C = 0
+    for i in range(len(my_history)-6, len(my_history)):
+        if my_history[i] == 'c' and their_history[i]=='b':
+            points[0] += -500
+            index_C += 1
+        if my_history[i] == 'b' and their_history[i]=='b':
+            points[1] += -250
+            index_B += 1
+        if my_history[i] == 'b' and their_history[i]=='c':
+            points[1] += 100
+            index_B += 1
+        if my_history[i] == 'c' and their_history[i] == 'c':
+            points[0] += 0
+    if len(my_history)>=5:
+        if index_B>0 and index_C>0 and (points[1]/index_B) > (points[0]/index_C):#more average points on b return b
+            return 'b'
+        elif index_B>0 and index_C>0 and (points[0]/index_C) > (points[1]/index_B):#more average points on c return c
+            return 'c'
+        else:
+            return their_history[-1]
 def test_move(my_history, their_history, my_score, their_score, result):
     '''calls move(my_history, their_history, my_score, their_score)
     from this module. Prints error if return value != result.
